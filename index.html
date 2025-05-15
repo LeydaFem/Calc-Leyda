@@ -12,7 +12,7 @@
   <title>Calculadora de Talla | Leyda Fem</title>
   <style>
     body {
-      background: #fff0f5;
+      background: #FFE0DA;
       font-family: 'montserrat';
       padding: 20px;
     }
@@ -93,6 +93,17 @@
     #resultado strong {
       color: #e2546e;
     }
+
+    @media screen and (max-width: 600px) {
+      iframe {
+        height: 720px !important;
+      }
+    }
+    @media screen and (max-width: 250px) {
+      button {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -150,20 +161,48 @@
       const tallaUSA = `${tallaBanda}${tallaCopa}`;
 
       const leydaFemDisponibles = [
-        "32B","34B","36B","38B","40B","42B","44B",
-        "34C","36C","38C","40C"
+        "32B",
+        "34B",
+        "36B",
+        "38B",
+        "40B",
+        "42B",
+        "44B",
+        "34C",
+        "36C",
+        "38C",
+        "40C"
       ];
 
       const equivalencias = {
-        "28A": "30B", "28B": "30C", "28C": "30D",
-        "30A": "32AA", "30B": "32A", "30C": "32B", "30D": "32C",
-        "32A": "30B", "32C": "34B", "32D": "34C", "32DD/E": "34C",
-        "34A": "32B", "34D": "36C",
-        "36A": "34B", "36D": "38C", "36DD/E": "38C",
-        "38A": "36B", "38D": "40C", "38DD/E": "40C",
-        "40A": "38B", "40D": "42C", "40DD/E": "42C",
-        "42A": "40B", "42C": "42B", "42D": "44C", "42DD/E": "44C",
-        "44A": "42B", "44C": "44B"
+        "28A": "30B", 
+        "28B": "30C", 
+        "28C": "30D",
+        "30A": "32AA", 
+        "30B": "32A", 
+        "30C": "32B", 
+        "30D": "32C",
+        "32A": "30B", 
+        "32C": "34B", 
+        "32D": "34C", 
+        "32DD/E": "34C",
+        "34A": "32B", 
+        "34D": "36C",
+        "36A": "34B", 
+        "36D": "38C", 
+        "36DD/E": "38C",
+        "38A": "36B", 
+        "38D": "40C", 
+        "38DD/E": "40C",
+        "40A": "38B", 
+        "40D": "42C", 
+        "40DD/E": "42C",
+        "42A": "40B", 
+        "42C": "42B", 
+        "42D": "44C", 
+        "42DD/E": "44C",
+        "44A": "42B", 
+        "44C": "44B"
       };
 
       const equivalenciasSecundarias = {
