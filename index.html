@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="LF1.png" type="image/x-icon">
+
+  <title>Calculadora de Talla | Leyda Fem</title>
+  <style>
+    body {
+      background: #fff0f5;
+      font-family: 'montserrat';
+      padding: 20px;
+    }
+
+    .calculadora {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #e2546e;
+      margin-bottom: 35px;
+    }
+    
+    label {
+      font-weight: 300;
+      display: block;
+      margin: 10px 0 5px;
+      margin-bottom: 5px;
+      color: #666;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      transition: border 0.3s ease;
+    }
+
+    input:focus {
+      border: 1px solid #e2546e;
+      outline: none;
+      box-shadow: 0 0 4px #d62a7b33;
+    }
+
+    button {
+      width: 150px;
+      display: block;
+      background-color: #e2546e;
+      color: white;
+      padding: 12px;
+      margin: auto;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 200;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.1,1.1);
+    }
+
+    #resultado {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.2;
+      font-family: 'montserrat'; /* o la fuente que estés usando */
+      color: #333333;
+    }
+
+    #resultado .resaltado {
+      font-size: 18px;
+      font-weight: bold;
+      color: #e2546e;
+    }
+
+    #resultado strong {
+      color: #e2546e;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculadora">
+    <h2>Calcula tu talla de brassier</h2>
+    
+    <label>Contorno bajo el busto (en cm):</label>
+    <input type="number" id="banda">
+
+    <label>Contorno del busto (en cm):</label>
+    <input type="number" id="busto">
+
+    <button onclick="calcularTalla()">Calcular mi talla</button>
+
+    <div id="resultado"></div>
+  </div>
+
+  <script>
+    function calcularTalla() {
+      const bandaCM = parseFloat(document.getElementById("banda").value);
+      const bustoCM = parseFloat(document.getElementById("busto").value);
+      const resultado = document.getElementById("resultado");
+
+      if (!bandaCM || !bustoCM || bandaCM < 50 || bustoCM < 60) {
+        resultado.innerHTML = "<p>Por favor, ingresa medidas válidas en centímetros.</p>";
+        return;
+      }
+
+      if (bustoCM <= bandaCM) {
+        resultado.innerHTML = "<p>La medida del busto debe ser mayor que la del contorno bajo busto.</p>";
+        return;
+      }
+
+      // Calcular banda en pulgadas y redondear al número par más cercano
+      const bandaIN = bandaCM / 2.54;
+      let tallaBanda = Math.round(bandaIN);
+      if (tallaBanda % 2 !== 0) tallaBanda += 1;
+
+      // Calcular busto en pulgadas y diferencia
+      const bustoIN = bustoCM / 2.54;
+      const diferencia = parseFloat((bustoIN - tallaBanda).toFixed(1));
+
+      // Determinar copa con precisión profesional (rangos suaves)
+      let tallaCopa = "";
+      if (diferencia < 1) tallaCopa = "AA";
+      else if (diferencia >= 1 && diferencia < 2) tallaCopa = "A";
+      else if (diferencia >= 2 && diferencia < 3) tallaCopa = "B";
+      else if (diferencia >= 3 && diferencia < 4) tallaCopa = "C";
+      else if (diferencia >= 4 && diferencia < 4.5) tallaCopa = "D";
+      else if (diferencia >= 4.5 && diferencia < 5.5) tallaCopa = "DD/E";
+      else if (diferencia >= 5.5 && diferencia < 6.5) tallaCopa = "DDD/F";
+      else tallaCopa = " más allá de F";
+
+
+      const tallaUSA = `${tallaBanda}${tallaCopa}`;
+
+      const leydaFemDisponibles = [
+        "32B","34B","36B","38B","40B","42B","44B",
+        "34C","36C","38C","40C"
+      ];
+
+      const equivalencias = {
+        "28A": "30B", "28B": "30C", "28C": "30D",
+        "30A": "32AA", "30B": "32A", "30C": "32B", "30D": "32C",
+        "32A": "30B", "32C": "34B", "32D": "34C", "32DD/E": "34C",
+        "34A": "32B", "34D": "36C",
+        "36A": "34B", "36D": "38C", "36DD/E": "38C",
+        "38A": "36B", "38D": "40C", "38DD/E": "40C",
+        "40A": "38B", "40D": "42C", "40DD/E": "42C",
+        "42A": "40B", "42C": "42B", "42D": "44C", "42DD/E": "44C",
+        "44A": "42B", "44C": "44B"
+      };
+
+      const equivalenciasSecundarias = {
+        "32B": ["30C", "34A"],
+        "34B": ["32C", "36A"],
+        "36B": ["34C", "38A"],
+        "38B": ["36C", "40A"],
+        "40B": ["38C", "42A"],
+        "42B": ["40C", "44A"],
+        "44B": ["42C"],
+        "34C": ["32D", "36B"],
+        "36C": ["34D", "38B"],
+        "38C": ["36D", "40B"],
+        "40C": ["38D", "42B"]
+      };
+
+      let resultados = [];
+      let hayOpcionLeydaFem = false;
+
+      if (leydaFemDisponibles.includes(tallaUSA)) {
+        resultados.push(`<p><strong style="color:#e2546e;">Talla Leyda Fem disponible:</strong> ${tallaUSA}<br><span style="color:#888;">(Esta es tu mejor opción con nosotros)</span></p>`);
+        hayOpcionLeydaFem = true;
+      }
+
+      resultados.push(`<p class="resaltado">Tu talla en sistema americano es: ${tallaUSA}</p>`);
+
+      if (!leydaFemDisponibles.includes(tallaUSA)) {
+        if (equivalencias[tallaUSA]) {
+          const equivalente = equivalencias[tallaUSA];
+          resultados.push(`<p><strong style="color:#e2546e;">Talla equivalente sugerida:</strong> ${equivalente}</p>`);
+          if (leydaFemDisponibles.includes(equivalente)) {
+            resultados.unshift(`<p><strong style="color#e2546e;">Talla Leyda Fem disponible:</strong> ${equivalente}<br><span style="color:#888;">(Esta es una opción que sí tenemos)</span></p>`);
+            hayOpcionLeydaFem = true;
+          }
+        } else {
+          resultados.push(`<p><strong style="color#e2546e;">Talla equivalente sugerida:</strong> Consulta con nuestro equipo para una alternativa personalizada.</p>`);
+        }
+      }
+
+      if (leydaFemDisponibles.includes(tallaUSA) && equivalenciasSecundarias[tallaUSA]) {
+        resultados.push(`<p><strong style="color:#e2546e;">También podrías probar con:</strong> ${equivalenciasSecundarias[tallaUSA].join(" o ")}</p>`);
+      }
+
+      if (!hayOpcionLeydaFem) {
+        resultados.push(`<p style="color:#e2546e;"><strong>Actualmente no contamos con esta talla en Leyda Fem.</strong><br><span style="color:#888;">Estamos trabajando para ampliar nuestras opciones. 💗</span></p>`);
+      }
+
+      resultado.innerHTML = resultados.join("");
+    }
+  </script>
+</body>
+</html>
